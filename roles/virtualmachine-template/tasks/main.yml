@@ -1,0 +1,38 @@
+---
+- name: Add open-vm-tools
+  apt:
+    name:
+      - open-vm-tools
+      - python3
+      - python3-pip
+      - cloud-init
+    state: present
+
+- name: Enable serial console
+  lineinfile:
+    dest: /etc/default/grub
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: '^GRUB_TIMEOUT'
+      line: 'GRUB_TIMEOUT=2'
+    - regexp: '^GRUB_TERMINAL'
+      line: 'GRUB_TERMINAL="console serial"'
+    - regexp: '^GRUB_SERIAL_COMMAND'
+      line: 'GRUB_SERIAL_COMMAND="serial --speed=115200"'
+    - regexp: '^GRUB_CMDLINE_LINUX'
+      line: 'GRUB_CMDLINE_LINUX="console=tty1 console=ttyS0,115200"'
+
+- name: Update grub
+  command: update-grub
+
+- name: Clean up apt
+  apt:
+    autoclean: yes
+    autoremove: yes
+
+    #- name: Enable the root user
+    #  ansible.builtin.user:
+    #    name: root
+    #    password_lock: no

@@ -1,0 +1,13 @@
+---
+- hosts: virtual_machines
+  gather_facts: no
+  roles:
+    - vcenter-login
+    - vcenter-virtualmachine
+
+- hosts: virtual_machines
+  vars:
+    ansible_connection: vmware_tools
+  roles:
+    - vcenter-move-network
+    - virtualmachine-template

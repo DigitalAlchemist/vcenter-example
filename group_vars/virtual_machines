@@ -1,0 +1,17 @@
+ansible_connection: vmware_tools
+ansible_vmware_host: 10.0.0.1
+ansible_vmware_user: administrator@vsphere.local
+ansible_vmware_validate_certs: no
+vm_template: base-template
+vm_datacenter_name: DatacenterName
+vm_folder: FolderName
+vm_cluster_name: ClusterName
+ansible_vmware_guest_path: DatacenterName/vm/FolderName/{{ inventory_hostname }}
+ansible_vmware_tools_user: root
+ansible_vmware_tools_password: virtual-machine-root-user-password
+ansible_vmware_tools_file_chunk_size: 2048
+vm_network: SomeNetworkName
+net_gateway: 10.0.1.1
+net_nameserver: 10.0.1.2
+net_address: "{{ ansible_host }}/27"
+

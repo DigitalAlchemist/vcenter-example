@@ -1,0 +1,22 @@
+---
+- name: Get password for vcenter user
+  ansible.builtin.pause:
+    echo: no
+  register: vcenter__vcenter_password
+  delegate_to: localhost
+  connection: local
+  when: ansible_vmware_password is undefined
+  run_once: yes
+
+- name: Set password fact on localhost
+  set_fact: ansible_vmware_password="{{ vcenter__vcenter_password.user_input }}"
+  delegate_to: localhost
+  connection: local
+  when: ansible_vmware_password is undefined
+  run_once: yes
+
+- name: Add password fact to all hosts. 
+  set_fact: ansible_vmware_password="{{ hostvars['localhost']['ansible_vmware_password'] }}"
+  delegate_to: "{{ item }}"
+  with_items: "{{ play_hosts }}"
+  when: ansible_vmware_password is undefined

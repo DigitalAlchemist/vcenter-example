@@ -1,0 +1,5 @@
+[foo_hosts]
+foo.host.tld ansible_host=10.0.1.3
+
+[virtual_machines:children]
+foo_hosts

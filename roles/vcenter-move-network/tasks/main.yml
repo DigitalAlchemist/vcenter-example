@@ -1,0 +1,24 @@
+---
+- name: Move VM to final network
+  community.vmware.vmware_guest_network:
+    hostname: "{{ ansible_vmware_host }}"
+    username: "{{ ansible_vmware_user }}"
+    password: "{{ ansible_vmware_password }}"
+    validate_certs: False
+    name: "{{ inventory_hostname }}"
+    network_name: "{{ vm_network }}"
+    mac_address: "{{ deployed_vm.instance.hw_eth0.macaddress }}"
+  delegate_to: localhost
+  vars:
+    ansible_connection: local
+
+- name: Update netplan
+  ansible.builtin.template: src=99-provisioned.yaml.j2 dest=/etc/netplan/99-provisioned.yaml owner=root group=root mode=0644
+
+- name: Delete old netplan
+  file:
+    state: absent
+    path: /etc/netplan/00-installer-config.yaml
+
+- name: Update addresses
+  command: netplan apply

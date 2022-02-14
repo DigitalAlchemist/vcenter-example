@@ -1,0 +1,18 @@
+---
+- name: Deploy VM from template
+  vmware_guest:
+    hostname: "{{ ansible_vmware_host }}"
+    username: "{{ ansible_vmware_user }}"
+    password: "{{ ansible_vmware_password }}"
+    validate_certs: False
+    name: "{{ inventory_hostname }}"
+    template: "{{ vm_template }}"
+    datacenter: "{{ vm_datacenter_name }}"
+    folder: "{{ vm_folder }}"
+    state: present
+    cluster: "{{ vm_cluster_name }}"
+    wait_for_ip_address: yes
+    linked_clone: true
+    snapshot_src: initial
+  delegate_to: localhost
+  register: deployed_vm

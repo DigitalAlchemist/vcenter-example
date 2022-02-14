@@ -1,0 +1,11 @@
+network:
+  ethernets:
+    ens160:
+      addresses:
+      - {{ net_address }}
+      gateway4: {{ net_gateway }}
+      nameservers:
+        addresses:
+        - {{ net_nameserver }}
+  version: 2
+      
